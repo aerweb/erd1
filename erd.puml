@@ -1,0 +1,87 @@
+@startuml
+
+' Zero or One |o
+' Exactly One ||
+' Zero or Many }o
+' One or Many }|
+
+entity "User" as users {
+    id
+    --
+    first_name
+    last_name
+    email
+    password_hash
+    facebook_id
+    google_id
+}
+
+entity "Loyalty Card" as cards {
+    id
+    ---
+    loyalty_program_id
+    user_id
+    card_number
+}
+
+entity "Loyalty Program" as loyalty_program {
+    id
+    --
+    name
+    image
+    validation_rule
+    merchant_id
+}
+
+entity "Coupon" as coupons {
+    id
+    --
+    flyer_id
+    titile
+    description
+    image
+}
+
+entity "Merchant" as merchants {
+    id
+    --
+    name
+    description
+    image
+}
+
+entity "Merchant - Loyalty Program" as mlp {
+    id
+    --
+    merchant_id
+    loyalty_program_id
+} 
+
+entity "Flyer" as flyers {
+    id
+    --
+    merchant_id
+    valid_from
+    valid_to
+}
+
+entity "User - Coupon" as user_coupons {
+    id
+    --
+    user_id
+    coupon_id
+}
+ 
+users ||...o{ cards : user_id
+cards }|...|| loyalty_program : loyalty_program_id
+
+merchants ||...o{ mlp : merchant_id
+mlp }o...|| loyalty_program : loyalty_program_id
+
+merchants ||...o{ flyers : merchant_id
+coupons }o...|| flyers : flyer_id
+
+users ||...o{ user_coupons : user_id
+coupons ||...o{ user_coupons : coupon_id
+
+@enduml
